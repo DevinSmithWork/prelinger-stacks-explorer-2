@@ -1,0 +1,149 @@
+[
+	{"name": "Places, Geographies, Histories",
+	"sub": [
+		"San Francisco Bay Area",
+		"California and Oregon",
+		"American West and Pacific Northwest",
+		"American Interior West, Central U.S., Midwest, Plains",
+		"American East, Southeast, and Northeast",
+		"American South",
+		"Global Places"
+	]},
+	{"name": "Environment",
+	"sub": [
+		"Cartography and Geography Topics (Theory, History, etc)",
+		"Ecology",
+		"Wildlife"
+	]},
+	{"name": "Extraction",
+	"sub": [
+		"Agriculture",
+		"Public Lands and Conservation",
+		"Forestry",
+		"Earth Science",
+		"Plastics",
+		"How-To: Mechanical",
+		"Manufacturing",
+		"Rural Studies"
+	]},
+	{"name": "Transportation",
+	"sub": [
+		"Automobility",
+		"Aviation",
+		"Rails",
+		"Seafaring",
+		"Bicycles"
+	]},
+	{"name": "Infrastructure",
+	"sub": [
+		"Energy Infrastructure",
+		"Civil Infrastructure",
+		"Urban Studies",
+		"Leisure"
+	]},
+	{"name": "Housing",
+	"sub": [
+		"Suburbia History and Culture",
+		"Housing Policy and Politics",
+		"Home Maintenance and How-To",
+		"Architecture",
+		"Interior Decoration",
+		"Building Trade Periodicals",
+		"Real Estate and Hospitality"
+	]},
+	{"name": "Art, Design, Print, and Advertising",
+	"sub": [
+		"Fine and Applied Art",
+		"Photography and Evidence",
+		"Advertising",
+		"Print and Advertising Periodicals"
+	]},
+	{"name": "Film, Broadcast, and Network Media",
+	"sub": [
+		"Television",
+		"Film",
+		"Film Reference",
+		"Radio",
+		"Telegraphy and Telephony",
+		"Computing"
+	]}, 
+	{"name": "Material Culture",
+	"sub": [
+		"Music",
+		"Food",
+		"American Cultural History and Americana",
+		"Fringe Topics",
+		"Humor",
+		"Language",
+		"Folklore"
+	]},
+	{"name": "Identity",
+	"sub": [
+		"Anthropology",
+		"Gender",
+		"Women's Studies",
+		"LGBTQIA+",
+		"Black History",
+		"Indigeonous Peoples",
+		"Latina, Latino, Latinx History"
+	]},
+	{"name": "U.S. Political History",
+	"sub": [
+		"Education",
+		"Historical Textbook Collection",
+		"State Apparatus",
+		"U.S. Internal Dissent",
+		"Family and Youth"
+	]},
+	{"name": "Geopolitics and Un-American Activities",
+	"sub": [
+		"U.S. Overseas Conflicts and Militarism",
+		"Atomic Age",
+		"Peace Movements and Utopianism",
+		"Anarchism",
+		"Labor History and Communism",
+		"New Deal"
+	]},
+	{"name": "Abstract and Off-Earth",
+	"sub": [
+		"Philosophy and Religion",
+		"Psychology and Parapsychology",
+		"Business",
+		"Health",
+		"General Science",
+		"Space Exploration"
+	]},
+	{"name": "Oversize, Special Collections, and Overflow",
+	"sub": [
+		"Atlases",
+		"Oversize Books and Periodicals",
+		"Oversize Boxed Documents",
+		"Artists' Books",
+		"Correll Collection",
+		"Boxed Maps",
+		"Science Fiction",
+		"Zines and Newsprint",
+		"Epicenter Zone Zine Archive",
+		"Punk Flyers",
+		"General Interest Magazines"
+	]},
+	{"name": "Reference",
+	"sub": [
+		"Libraries, Archives, and Information",
+		"Almanacs",
+		"Works produced using this library",
+		"Government Documents"
+	]},
+	{"name": "Ephemera",
+		"sub": [
+			"Ephemera Subzone"
+	]},
+	{"name": "Therkleson Collection",
+		"sub": [
+			"Therkleson Subzone"
+	]},
+	{"name": "Flat File",
+		"sub": [
+			"Flat File Subzone"
+	]}
+]

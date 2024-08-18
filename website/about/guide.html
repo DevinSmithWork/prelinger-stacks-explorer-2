@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="about.css">
+
+    <title>Stacks Explorer 2: User Guide</title>
+
+</head>
+
+<body>
+
+    <h1>Stacks Explorer 2</h1>
+    <h2 class=subtitle>User Guide</h2>
+
+    <div class=main-column>
+
+        <h2 id=toc-h2>Table of Contents</h2>
+        <nav id=toc>
+        <ul>
+            <li><a href="#what-is-this">What is this?</a></li>
+            <li><a href="#google-maps">It works like Google Maps</a></li>
+            <li><a href="#menu-stuff">What's all the stuff in the menu?</a></li>
+            <li><a href="#click-view">The menu in Click View</a></li>
+            <li><a href="#icons">What do the icons in "Scanned Items" mean?</a></li>
+            <li><a href="#list-view">The menu in Click View</a></li>
+        </ul>
+    </nav>
+
+    <h2 id=what-is-this>What is this?</h2>
+
+    <p>
+        This is a photo-based browsing interface for the <a href="http://prelingerlibrary.org">Prelinger Library</a> in San Francisco.
+    </p>
+    <p>
+        Just like the library, it arises from a somewhat different set of perspectives and questions than a typical library website, resulting in a somewhat different user experience.
+    </p>
+    <p>
+        With that said, it borrows a lot from a pretty familiar source...
+    </p>
+
+
+    <h2 id=google-maps>It works like Google Maps</h2>
+
+    <p>
+        When the page loads up, you'll be looking at a bird's-eye view of the library: Starting from the top, you'll see six stacks of books, the Ephemera collection, the Therkelson collection, and the flat files. On the left-hand side, you'll see a menu with some buttons at the top -- including the "Help!" button you used to get here.
+    </p>
+
+    <h3 id=photo-ui>Here's some ways you can interact with the stacks photos:</h3>
+
+    <ul>
+        <li>Mousewheel / Pinching zooms in and out.</li>
+        <li>Click-hold &amp; drag / Tap-hold &amp; drag to move around.</li>
+        <li>
+            Clicking / Tapping on a shelf will pull up info about it in the menu.
+        </li>
+        <li>Double-click / Double-tap to zoom in.</li>
+        <li>
+            Click the "zoom out" button in the upper-right corner to get back to the bird's-eye view.
+        </li>
+    </ul>
+
+    <h2 id=menu-stuff>What's all the stuff in the menu?</h2>
+
+    <p>
+        When the page loads, the menu starts in the "click view." There's a second "list view" you can change to, which we'll cover second.
+    </p>
+    <p>
+        Before we get into specifics, here's three quick notes on the menu:
+    </p>
+
+    <ul>
+        <li>
+            You can open or close the menu with the "X" button in the upper-left corner.
+        </li>
+        <li>
+            You can resize the menu by click-dragging/tap-hold-dragging the handle with the arrow icon toward the bottom-right of the menu. (This helps with reading longer titles in the "scanned items" list!)
+        </li>
+        <li>
+            Some of the menu functions draw highlights on the stacks photos. If it gets too messy, you can click the "clear highlights" button to clear off all the highlights.
+        </li>
+    </ul>
+
+    <h3 id=click-view>The Menu in Click View</h3>
+
+    <p>
+        When you click on a shelf photo, an aqua highlight will be drawn around it, and a bunch of info will pop up in the menu about what's on the shelf. Not every shelf will have all of these headings, but here's everything that can pop up here: 
+    </p>
+
+    <ul>
+        <li>
+            <b>Zone &amp; Subzone</b>: The Prelinger Library doesn't use a standard catalog. Instead, it's arranged in a geospatial-conceptual taxonomy, representing a contiguous flow of ideas. The "zones" and "subzones" are mostly taken from a guide that Megan put together after the collection's significant refresh during the Covid shutdown. There's a dozen-or-so zones; each has a handful of subzones.
+        </li>
+
+        <li>
+            (There's full lists of all this stuff in the "list view" -- don't worry, we'll get there!)
+        </li>
+
+        <li>
+            <b>Other Material Here</b>: Some areas of the library (oversize, ephemera, Therkelson, and the Flat File) have material from a bunch of different zones/subzones. These related places will be listed here.
+        </li>
+
+        <li>
+            <b>Periodicals (Shelf)</b>: The library has a lot of great periodicals! Notable items located on the clicked shelf will be listed here.
+        </li>
+
+        <li>
+            <b>Special Collections (Shelf)</b>: Same, but with collections.
+        </li>
+
+        <li>
+            <b>Scanned Items (Ext. Links)</b>: Here's the really neat part! The Prelinger Library has a few thousand items scanned in its <a href="https://archive.org/details/prelinger_library">Internet Archive collection</a>. If any of those items are relevant to the clicked shelf's zone/subzone(s), they'll be listed here. Clicking on one of these items will open it in a new browser tab.
+        </li>
+    </ul>
+
+    <h3 id=icons>What do the icons in "Scanned Items" mean?</h3>
+
+    <p>
+        <span class=c>&#9903;</span> : <b>Collections with multiple items</b>.<br>Typically, these are <a href="https://archive.org/details/prelinger_library?tab=collection&query=%22Bell+telephone+magazine%22">periodicals with multiple scanned issues</a>, multi-volume reports, etc etc.
+    </p>
+
+    <p>
+        <span class=g>&#9881;</span> : <b>Government documents</b>.<br>Includes agency-authored items, e.g. <i><a href="https://archive.org/details/communitycanning00unitrich/mode/thumb?view=theater">Community Canning Centers</a></i>; GPO-published items like congressional records; And commercial works produced with government participation, e.g. <i><a href="https://archive.org/details/flighttoeverywhe00dmitrich/flighttoeverywhe00dmitrich/page/n5/mode/thumb?view=theater">Flight to Everywhere</a></i>.
+    </p>
+
+    <p>
+        <span class=il>&#9830;</span> to <span class=il>&#9830;&#9830;&#9830;</span> : <b>Indicates the level of visual material in the item</b>.<br>This was noted subjectively: Typically, it's a mix of both quantity and quality. For example, kids' books are often short but full of excellent artwork.
+    </p>
+
+    <h3 id=list-view>The Menu in List View</h3>
+
+    <p>
+        At the top of the menu, there's a button labeled "show lists" that will toggle the menu into list view. (Click this button again to toggle back to click view) Unsurprisingly, the list view contains lists of everything in the data set:
+    </p>
+
+    <ul>
+        <li>
+            <b>Zones &amp; Subzones</b>: This is a nested list of zones &amp; subzones, in the order that they appear in the library. (In the stack photos, this is mostly left-to-right, starting at the top.)
+            <ul>
+                <li>
+                    <b>Clicking open a Zone</b> (Environment, Housing, Identity, etc) will draw a yellow highlight above the stacks where these zones appear.
+                </li>
+                <li>
+                    <b>Clicking open a Subzone</b> will draw a yellow highlight around the shelves where this subzone appears.
+                </li>
+                <li>
+                    Nested into the subzone are <b>lists of Periodicals, Special Collections, and Scanned Items</b> related to that subzone.
+                </li>
+                <li>
+                    Open the Periodicals and Special Collections and click on list items to highlight their shelf locations in magenta.
+                </li>
+                <li>
+                    Open the Scanned Items and click on the links to open the scanned item in a new browser window.
+                </li>
+                <li>
+                    Closing a zone or subzone list will clear the highlights of everything nested inside it.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Periodicals (Shelves):</b> An alphabetical list of all the periodicals in the physical library. Clicking these list items will highlight the shelf/shelves where these items appear. (Clicking a list item again will clear its highlight.)
+        </li>
+        <li>
+            <b>Special Collections (Shelves):</b> An alphabetical list of the special collections in the physical library. Clicking these list items will highlight the shelf/shelves where these items appear. (Clicking a list item again will clear its highlight.)
+        </li>
+        <li>
+            <b>Scanned Items (Ext. Links):</b> An alphabetical list of all the scanned items in the Prelinger Library's Internet Archive collection. Clicking these links will open the item in a new browser window. (See above for the icons.)
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

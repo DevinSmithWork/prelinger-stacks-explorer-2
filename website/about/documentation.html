@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="about.css">
+
+	<title>Stacks Explorer 2: Technical Documentation</title>
+
+</head>
+
+<body>
+
+	<h1>Stacks Explorer 2</h1>
+	<h2 class=subtitle>Technical Documentation</h2>
+
+	<div class=main-column>
+
+    <p>
+        This page details how the site was built. If you're looking the user guide, <a href="guide.html">click here</a>.
+    </p>
+
+    <p>
+    	The code is up on this GitHub Repo. [ETA August 18]
+    </p>
+
+	<h2 id=toc-h2>Table of Contents</h2>
+	<nav id=toc>
+		<ol>
+			<li>How This Thing Was Put Together: Overview</li>
+
+			<li>Photography &amp; Image Processing
+				<ol>
+					<li>General overview</li>
+					<li>Photography</li>
+					<li>Adjusting skew/perspective and compositing with Processing</li>
+					<li>Creating DeepZoom Images</li>
+				</ol>
+			</li>
+
+			<li>Data Entry &amp; Prep for Website 
+				<ol>
+					<li>Physical Library</li>
+					<li>Scanned Items (Internet Archive Collection)</li>
+					<li>Data Prep</li>
+				</ol>
+			</li>
+
+			<li>Website Structure
+				<ol>
+					<li>General Overview</li>
+					<li>OSD canvas click &rarr; library data</li>
+					<li>Library data &rarr; OSD canvas/viewer</li>
+				</ol>
+			</li>
+
+		</ol>
+	</nav>
+
+	<h2>1.&nbsp;&nbsp;How This Thing Was Put Together: Overview</h2>
+
+	<ol>
+		<li>
+			<b>PHOTOS:</b>
+			<ul>
+				<li>
+					Shooting: This time around, I shot in raw format, resulting in better-quality photos at the expense of some extra conversion steps. I also rigged up a camera mount that attached to the library's rolling ladders.
+				</li>
+				<li>
+					Editing: You'll notice the individual photos are now 1:1 with the shelves' dimensions. I wrote a Processing program to facilitate this editing in a streamlined way.
+				</li>
+				<li>
+					<a href="https://en.wikipedia.org/wiki/Deep_Zoom">Deep Zoom Image</a> [.dzi] format: I converted the full-stack composites to .dzi for use with OpenSeadragon (see below). If you're looking to replicate this workflow, there's some edge cases to be aware of.
+				</li>
+			</ul>
+		</li>
+
+		<li>
+			<b>DATA ENTRY:</b> During the library's refresh, Megan produced an excellent guide for in-person visitors. I used this guide as a starting point for the zones/subzones organization of the site. The Internet Archive's command-line tool was helpful for creating a starting point for entering data about the scanned items.
+		</li>
+
+		<li>
+			<b>UX:</b> <a href="https://openseadragon.github.io/">OpenSeadragon</a> [OSD] is an open-source JavaScript [JS] library for displaying .dzi images. OSD is robust, full-featured, and has an active community with a <a href="https://github.com/openseadragon/openseadragon/commits?author=iangilman">fantastic lead developer</a>. The JS code that translates back-and-forth between library-space and OSD-space is fairly complex; See the section "4 Website Structure" below for details.
+		</li>
+
+	</ol>
+
+
+
+
+
+
+<h2 id=image-processing>2.&nbsp;&nbsp;Photography &amp; Image Processing</h2>
+
+	<h3>2.1 General Overview</h3>
+	<p>
+		At a high level, what's needed is a photo of every shelf and a way to stitch them together -- but along the way, there's some procedural decisions that can influence both the shooting efficiency and the overall aesthetic feel of the website. My process involved (1) rigging up a camera mount for shooting, (2) automating raw-to-tiff conversions with Darktable, (3) writing a Processing program for adjusting the photos' perspective/skew, (4) using Processing to create the shelf composites, and (5) converting the composites to .dzi format for OpenSeadragon with a quick python script. Of the three main parts of this documentation (Photos, Data, and UX), this section includes the most potential for automation and general workflow improvements.
+	</p>
+
+	<h3>2.2 Photography</h3>
+
+		<p>
+			I used a camera similar setup as the first version, with a fixed aperture, variable exposure time, and fixed white balance. The fixed aperture provides a consistent depth of field, and the fixed white balance provides a consistent color spectrum when the photos are composited (This helps the the user visually locate themselves in a physical environment).
+		</p>
+
+		<p>
+			Once I figured out a feasible way to handle the skew/perspective editing (see below), I opted to shoot in 4:3, the camera's native sensor dimensions. The shooting went quicker this time around because the framing didn't need to be precise, and I rigged some stand clamps from Sammy's onto the library's rolling ladders, which helped with shooting higher shelves.
+		</p>
+
+		<details>
+			<summary>Idea: Better camera mounting strategies</summary>
+			<p>
+				My DIY rig was adequate for the Prelinger Library's size, but you're planning a similar project for anything larger, exploring better camera mount strategies is 100% worth it.
+			</p>
+			<p>
+				I tried attaching a camera mount directly to the shelving units, which would create consistently equidistant photos; but I couldn't find a reasonable arrangement which prevented either the rigging from appearing in the photos or blurring from instability.
+			</p>
+			<p>
+				With a larger budget, the idea rig would be some kind of rolling rack with a tall, vertically repositionable camera mount and locking wheels. Stabilization would need to be considered; This would be an excellent project for a few collegiate engineering students.
+			</p>
+		</details>
+
+		<p>
+			Another request for v2 was shooting in raw, a lossless digital format. (I shot v1 in HQ .jpg to reduce filesizes and expedite the Processing workflow.) Raw files require an application to combine the camera's sensor data with metadata to produce a viewable image. Adobe software is the industry standard, but <a href="https://www.darktable.org/">Darktable</a> is the free, open-source solution, and it has a <a href="https://docs.darktable.org/usermanual/3.8/en/special-topics/program-invocation/darktable-cli/">command line interface</a> for automating common tasks. (Like most open-source software, it's a little clunky and there's a learning curve.) Here's the batching workflow I used:
+		</p>
+
+		<ol>
+			<li>Toss a couple raw files into the <em>lighttable</em></li>
+			<li>Open one up in the <em>darkroom</em>, and make your desired adjustments with the <em>modules</em>.</li>
+			<li>Save your <em>editing history stack</em> as a <em>style</em>.</li>
+			<li>Switch back to the <em>lighttable</em>, and apply this style to the other images to test how it looks. Adjust as needed.</li>
+			<li>After you've got a <em>style</em> that you like, you apply it to batches using the command-line tool:</li>
+		</ol>
+
+		<div class=code-container>
+			<code>
+			darktable-cli [input folder] --style [your saved style] --out-ext [.tiff, .jpeg, etc] [output folder]
+			</code>
+		</div>
+
+		<details>
+			<summary>
+				Note: .xmp files
+			</summary>
+			<p>
+				Darktable stores image metadata in a separate .xmp "sidecar" file. The data compression of raw is surprising: A 20mb .arw file with a 5k .xmp exports to a 240mb .tif!
+			</p>
+		</details>
+
+		<details>
+			<summary>
+				Note: Darktable CLI/GUI program conflict
+			</summary>
+			<p>
+				The command line program won't 	operate if the desktop application is also running. IDK why. It's <s>Chinatown</s> OpenSource, Jake.
+			</p>
+		</details>
+
+		<details>
+			<summary>
+				Note: CPU throttling for long conversion queues
+			</summary>
+			<p>
+				If you're using an older computer (like me), converting 300+ raw files can redline your CPU for a few hours, which is <i>no bueno</i>. Consider using a tool like <a href="https://formulae.brew.sh/formula/cpulimit">cpulimit</a> to manually throttle the batch processing.
+			</p>
+		</details>
+
+		<details>
+			<summary>
+				Note: 32-bit .tif errors in Processing
+			</summary>
+
+			<p>
+				Processing had trouble working with 32-bit tiffs: It looks like the color depth was truncated? (Pure white displayed as turquoise, etc.) If you run into similar problems, tack this onto the darktable-cli command above to output 16-bit tifs instead:
+			</p>
+
+			<div class=code-container>
+				<code>
+					--core --conf plugins/imageio/format/tiff/bpp=16
+				</code>
+			</div>
+
+			<p>
+				Here's another handy bash command, which displays the metadata differences between two files:
+			</p>
+
+			<div class=code-container>
+				<code>
+					diff &lt;(mdls [file 1]) &lt;(mdls [file 2]) -y --suppress-common-lines
+				</code>
+			</div>
+
+		</details>
+
+
+	<h3>2.3 Adjusting skew/perspective and compositing with Processing</h3>
+		<p>
+			Once the raw files were processed and converted to .tif, the next step was skew/perspective adjustments and resizing, which I wrote a Processing program for. The program asks for a folder of images, which are displayed in order; The user clicks on the four corners of the shelf, after which the clicked-corners are mapped to the shelf's IRL height:width ratio and the resized image is exported. The library has some slight variation in shelf heights and widths, so taking measurements and changing the IRL height &amp; width variables was sometimes needed.
+		</p>
+
+		<p>
+			Processing's default texture-mapping renderer is kinda lazy: it draws an "X" connecting the four edge points, and stretches the four resulting triangles... which looks lousy. After some experimentation, I found excellent results from creating a large number of stepped points (i.e., <a href="https://processing.org/reference/lerp_.html">lerping</a>) between both the clicked-corner and export-image-corner points, and drawing them as <a href="https://processing.org/reference/vertex_.html">vertices</a> inside a loop. From a rendering standpoint, this creates so many tiny "X"s that the triangles appear contiguous and the resizing looks smooth.
+		</p>
+
+		<p>
+			One unexpected benefit of this strategy is that placing edge points in odd places or out-of-order creates some wild artwork!
+		</p>
+
+		<details>
+			<summary>Idea: Automate shelf-corner finding with computer vision</summary>
+			<p>
+				One way to speed this up would be adding colored stickers to the shelf edges <em>prior</em> to shooting, then using computer vision to automatically detect the four edge points. Again, this seemed unnecessary for the Prelinger Library's size, but could be a valuable time-saver for a larger library.
+			</p>
+		</details>
+
+		<p>
+			Creating large composites from rectangular photos is fairly straightforward, requiring only a few nested loops. But for composites of this size, using an offscreen PGraphics object is advisable to avoid possible pixel limits in size() and redraw() delays.
+		</p>
+
+		<details>
+			<summary>Idea: Skip the compositing and do the layout in OpenSeadragon</summary>
+			<p>
+				In order to keep the back-end as simple as possible, I created our nine stack composites and converted them to nine large .dzi files. However, OSD's viewer class includes robust options for handling <a href="https://openseadragon.github.io/docs/OpenSeadragon.Viewer.html#addTiledImage">multiple tiled images</a>, and together with a more complex back-end setup, creating a single .dzi for each shelf and arranging them into stacks with OSD may be a more appropriate strategy.
+			</p>
+			<p>
+				The major benefit of this later strategy is that (1) OSD can identify which image (ie: shelf) was clicked on, and (2) arbitrary JSON data can be stored and retrieved for each image. 
+			</p>
+		</details>
+
+
+	<h3>2.4 Creating DeepZoom images</h3>
+		<p>
+			Before your very-large stack composite can be used with OpenSeadragon, it needs to be converted to one a few different image tiling formats: .dzi, .iiif, .tms, etc -- <a href="https://openseadragon.github.io/examples/creating-zooming-images/">See here for a full list</a>. I used <a href="https://github.com/openzoom/deepzoom.py">deepzoom.py</a> to generate .dzi files; Here's the basic "hello world" they provide:
+		</p>
+		<div class=code-container>
+		<pre><code>import os
+import deepzoom
+
+SOURCE = "example.jpg"
+
+creator = deepzoom.ImageCreator(
+    tile_size=128,
+    tile_overlap=2,
+    tile_format="jpg",
+    image_quality=0.8,
+    resize_filter="bicubic",
+)
+
+creator.create(SOURCE, "./example.dzi")</code></pre>
+		</div>
+
+		<details>
+			<summary>Note: Decompression Bomb errors</summary>
+			<p>
+				Due to the size of my images, deepzoom.py raised an error about "decompression bombs" and exited. (This is apparently a <a href="https://en.wikipedia.org/wiki/Zip_bomb">crafty hacker attack</a> where you create a small zip file that unpacks into a gigantic amount of data.) The error's stack trace includes the .py module where this check occurs if you need to disable it.
+			</p>
+		</details>
+
+		<details>
+			<summary>Note: PIL/Pillow error</summary>
+			<p>
+				One of the image-processing packages used by the deepzoom image creator has been superseded by a newer package, and you may need to install the older version. If you get an error about the PIL package, try:
+			</p>
+			<div class=code-container>
+				<code>pip install Pillow==9.5.0</code>
+			</div>
+		</details>
+
+
+
+
+
+<h2>
+	3.&nbsp;&nbsp;Data Entry &amp; Prep for website
+</h2>
+
+<h3>3.1 Physical library</h3>
+
+	<p>
+		The Prelinger Library's idiosyncratic organization creates both opportunities and drawbacks for getting data into a website like this. Detached from a standardized catalog, I instead worked from Megan's guide as a starting point, going shelf-by-shelf and noting the zone/subzone, periodicals, and special collections.
+	</p>
+
+	<p>
+		Some areas of the library (oversize, ephemera, and Therkleson in particular) include material from a variety of different zones/subzones on a single shelf. In these cases, the first zone/subzone is displayed first in the sidebar "click view," with the additional zones/subzones under "Material also on this shelf." In the sidebar "list view," every shelf containing a zone/subzone will be highlighted; Hence the user sees every place in the library with material on that topic.
+	</p>
+
+<h3>3.2 Scanned Items (Internet Archive collection)</h3>
+
+	<p>
+		Stacks Explorer v1 used a roundabout method to link scanned items to the physical collection: We entered keywords for each library shelf, and if those keywords returned a non-zero result when searching the Prelinger's IA collection, we included that search link in the interface.
+	</p>
+
+	<p>
+		This time around, we instead stepped through every item in the IA collection, and assigned to one-or-more of the physical library's zones/subzones -- That is, we "shelved" the scanned items into the library's physical organization. This means (1) every scanned item is present in the interface, and (2) some scanned items (most, really!) appear in multiple locations.
+	</p>
+
+	<details>
+		<summary>
+			Note: Internet Archive CLI
+		</summary>
+		<p>
+			The internet archive has a handy <a href="https://archive.org/developers/internetarchive/cli.html">command line interface</a>. This tiny program is deceptively powerful, check out the help text. For our purposes -- i.e., "shelving" the digital collection -- we didn't need to download the scanned items, we just needed the metadata. I did this in a two-step process (which you could probably fit into a single step if you're better with bash than me):
+		</p>
+
+		<div class=code-container>
+		<pre><code>ia search "collection:prelinger_library" -i > item_identifiers.txt;
+
+ia download --itemlist="item_identifiers.txt" --destdir=cli-meta-downloads --glob=*_meta.xml --no-directories;</code></pre>
+		</div>
+
+		<p>
+			The first command (1) sends a search to IA for collections with the name "prelinger_lirbary", (2) gets a list of all the item identifiers in that collection, and (3) outputs them to a text file. The second command (1) runs through that list of identifiers, and (2) downloads their [identifier]_meta.xml files into a single directory named "cli-meta-downloads."
+		</p>
+	</details>
+
+	<p>
+		This multiple-location shelving strategy led to some fascinating consequences, my favorite of which is the unsioling of children's material. Typically, material for youngsters is segregated into a physical location regardless of its topic; But with this new strategy, a kids book about cars sits alongside a technical document on highway design.
+	</p>
+
+	<details>
+		<summary>
+			Note: Faceted classification
+		</summary>
+		<p>
+			The technical term for this approach is a pure faceted system; And each "facet" (ie: zone/subzone) of the scanned item is given equal weighting (e.g., the ordering of a scanned item's zones/subzones is arbitrary).
+		</p>
+	</details>
+
+
+
+<h3>3.3 Data Prep</h3>
+
+	<p>
+		Python's streamlined looping made it the easiest tool for getting our various CSVs into a more digestible .json format for the website. The main data file uses a 3D array structure for storing each shelf's data: That is, library_nested[4][11][2] contains the data for bank 4, shelf 11, row 2. The overall relationship between the files is <a href="https://guides.visual-paradigm.com/a-comprehensive-guide-to-database-normalization-with-examples/">quasi-2NF</a>: Periodicals, Special collections, and IA items are referred to by index keys in the main file, with the details stored in additional files.
+	</p>
+
+	<p>
+		Once again, this data structure responds to our minimal back-end setup and is designed for quick load times. Compared to the data entry CSV files, we dropped from 673kb to 404kb, a 40% compression ratio. (It ain't much, but it's honest work.)
+	</p>
+
+	<details>
+		<summary>
+			Idea: Libraries with catalogs have a more data options
+		</summary>
+		<p>
+			Traditionally-cataloged libraries will have significantly more options for data encoding and retrieval; particularly when coupled with more complex back-ends setups.
+		</p>
+		<p>
+			For example, the first and last call number on a shelf could be noted, and used in a database query to retrieve all the holdings on that shelf (and even items in offsite storage!). Coupled with the earlier suggestion about using OSD's tiling layout and ability to store arbitrary data, these start and end call numbers may be the only non-image-layout data needed to power the interface. The call numbers could then be used to dynamically generate a list of topics for the shelves, or link directly to scanned or related material.
+		</p>
+	</details>
+
+
+
+<h2>4.&nbsp;&nbsp;Website Structure</h2>
+
+	<h3>4.1 General Overview</h3>
+
+	<ul>
+		<li>
+			Not including the &lt;head&gt;, the <em>index.html</em> is only 100 lines long; Nearly all the content is created dynamically with JS. (Side note: This is terrible for accessibility -- we're brainstorming alternate interfaces for screen readers.)
+		</li>
+
+		<li>
+			<em>Script.js</em> begins with a chonky object named <em>layout</em>, containing all the variables needed for activities like:
+			<ul>
+				<li>
+					placing the stacks dzi onto the canvas
+				</li>
+				<li>
+					figuring out which shelf the user clicked on
+				</li>
+				<li>
+					highlighting shelves when a user selects something in the sidebar's "list view."
+				</li>
+			</ul>
+		</li>
+
+		<li>
+			Because several stacks share similar sizing characteristics with only slight variations, the <em>layout.standard</em> object contains a few more variables to accommodate these slight variations.
+		</li>
+
+		<li>
+			The OpenSeadragon [OSD] canvas is loaded (unsurprisingly) into <em>&lt;div id=osd-container&gt;&lt;/div&gt;</em> in the <em>.html</em>.
+		</li>
+
+		<li>
+			All the .json files are loaded and parsed (also unsurprisingly) in the JS function <em>loadLibrary&shy;Data&shy;WithCallbacks()</em>. After all the .json files have loaded, (1) the sidebars are populated,(2) the event handler for processing clicks on the OSD canvas (which reference the .json data) is added, and (3) the loading window cross-fades to the menu.
+		</li>
+
+		<li>
+			From there on out, the JS code is primarily concerned with (1) translating back-and-forth between the visual space of the OSD canvas and the library data (see "Idea: Skip the compositing..." above for an alternate strategy); And (2) handling the UI functions in the sidebars.
+		</li>
+	</ul>
+
+	<p>
+		The interchange between library data &harr; OSD canvas is the hairiest part of the code, so I'll describe how it works in these next two sections. (The non-minimized <em>script.js</em> is fairly well-commented if you want more fine-grain details.)
+	</p>
+
+	<details>
+		<summary>Note: JS coding style</summary>
+		<p>
+			Reading through <em>script.js</em>, you'll notice some style quirks: I'm typically using "for" loops with set end conditions instead of .forEach, for/in, and spread; The =&gt; operator is generally avoided; U16 arrays; No JQuery; etc. etc.
+		</p>
+		<p>
+			There's a two main reasons for this: (1) Because the sidebar lists are created dynamically, small inefficiencies are multiplied a thousandfold; and (2) Old Man Yells At Cloud: IDK I just kinda dislike jquery for some reason?? For the type of work I do, it feels like a totally unnecessary intermediary layer. But I freely admit that in many cases, it's basically overoptimization for the sake of overoptimization.
+		</p>
+	</details>
+
+
+
+	<h3>4.2 OSD canvas click &rarr; library data</h3>
+
+	<p>
+		The JS function <em>getLocationFromViewportPoint()</em> handles this process:
+	</p>
+	<ol>
+		<li>
+			OSD provides the stack number from the clicked image; Retrieve <em>tileSources[].layout</em> from the clicked image.
+		</li>
+		<li>
+			Using <em>tileSources[].layout</em>, loop <em>layout.bank_widths</em> or <em>uniform_bank_width</em> to find the bank number.
+		</li>
+		<li>
+			In <em>tileSources[].layout</em>, select the apropriate <em>shelf_heights</em> array, and loop to find the row number.
+		</li>
+		<li>
+			During the steps to find the stack, bank, and row, if the click's <em>viewport point</em> is found to be outside the image's boundaries, <em>false</em> is returned.
+		</li>
+		<li>
+			The resulting values are used to get the data in <em>stacks_data[stack][bank][row]</em>.
+		</li>
+	</ol>
+
+
+
+	<h3>4.3 Library data &rarr; OSD canvas/viewer</h3>
+
+	<p>
+		When the user interacts with an element in the sidebar lists -- e.g. carroting open the zone/subzones <em>&lt;details&gt;</em>, or clicking on periodicals or special collections -- the element calls the JS function <em>hl(this)</em>:
+	</p>
+
+	<ol>
+		<li>
+			If the element is already highlighted, it's <em>classList</em> will include "text-hl1" or "text-hl2." If so, the element's highlights are removed along with its subelements' highlights. Otherwise:
+		</li>
+		<li>
+			<em>this.id</em> contains an alphanumeric string indicating the type of element (e.g. zone, subzone, periodical, etc), and an index in the relevant data source. For example:
+			<ul>
+				<li>z-2 = <em>zones_data[2]</em></li>
+				<li>s-4-5 = <em>zones_data[4].sub[5]</em></li>
+				<li>p-139 = <em>periodicals_data[139]</em></li>
+			</ul>
+		</li>
+		<li>
+			This alphanumeric string is parsed in <em>process&shy;Element&shy;For&shy;Highlighting()</em>, and the resulting <em>loc</em> array (each item is a stack location, stored in [stack][bank][row] format) is passed to <em>drawHighlights()</em>
+		</li>
+	</ol>
+
+	<p>
+		<em>DrawHighlights()</em> loops through the <em>loc</em> array, calculating the stack location's pixel position on the OSD <em>viewer</em> with <em>calcViewerHighlight()</em>, and creates the highlights (which are <a href="https://openseadragon.github.io/docs/OpenSeadragon.Overlay.html">OSD Overlay objects</a>).
+	</p>
+
+	<p>
+		<em>CalcViewerHighlight()</em> finds the stack location's pixel values in a 2-step process (x &amp; width and y &amp; height), and references the chonky <em>layout</em> object.
+	</p>
+
+	<p>
+		Each highlight (aka OSD <em>Overlay</em>) requires an HTML element so it can be appended to the <em>DOM</em> and styled as needed. The letter in the alphanumeric string determines the CSS styling applied to the <em>Overlay</em>, via <em>classList.add()</em>.
+	</p>
+
+</div>
+
+</body>
+</html>

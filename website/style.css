@@ -1,0 +1,363 @@
+/* --------------------------------- */
+/* MAIN AREAS */
+
+body {
+    padding:0px;
+    margin:0px;
+    background-color:#333;
+    color:white;
+    font-family:"Andale Mono", monospace;
+}
+
+#osd-container {
+    width:100%;
+    height:100%;
+    z-index:-1;
+    border:none;
+}
+
+/* OSD requires a div for the toolbar -- TK seeing if I can disable this alltogether */
+#hidden-toolbar {display:none;}
+
+#show-menu-button {
+    display:none;
+    position:fixed;
+    top:0.5em;
+    left:0.5em;
+    z-index:1;
+}
+
+#zoom-out-button {
+    position:fixed;
+    top:0.5em;
+    right:0.5em;
+    z-index:1;
+}
+
+/* Menu-div is nested into a container b/c padding disables resize:horizontal */
+#menu-container {
+    visibility:hidden;
+    opacity:0;
+    transition:opacity 1s, visibility 1s;
+
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    padding:0;
+    margin:0;
+    height:100vh;
+    width:20em;
+    background-color:rgba(0, 0, 0, 0.8);
+    overflow-y:scroll;
+    z-index:2;
+}
+
+#menu-div {
+    padding:0.5em 0.5em 2em;
+    font-size:0.9em;
+}
+
+#resize-handle {
+    visibility:hidden;
+    opacity:0;
+    transition:opacity 1s, visibility 1s;
+
+    position:absolute;
+    z-index:20;
+    left:20em;
+    bottom:0.5em;
+    background-color:rgba(0,0,0,0.8);
+    color:white;
+    text-align:center;
+    cursor:col-resize;
+    height:3.3em;
+    width:1.6em;
+
+
+}
+
+.resize-handle-icon {
+    font-size:1.5em;
+    padding:0.35em 0em;
+}
+.resize-handle-icon:hover {color:deeppink;}
+
+#resize-handle-vertical {
+    display:none;
+    visibility:hidden;
+    opacity:0;
+    transition:opacity 1s, visibility 1s;
+}
+
+a {color:white; text-decoration:none;}
+a:hover {color:deeppink;}
+
+/* "YOU CLICKED ON" sidebar is displayed by default,
+these are toggled via "SHOW LISTS" button --> toggleListView(); */
+#zones-div, #periodicals-div, #sc-div, #ia-div {display:None;}
+
+
+/* --------------------------------- */
+/* LOADING WINDOW */
+#loadingStatus {
+    font-size:x-small;
+    position:fixed;
+    left:1em;
+    top:1em;
+    width:23em;
+
+    background-color:rgba(0, 0, 0, 0.8);
+    border:1px solid;
+    padding:0.5em;
+
+    opacity:1;
+    transition:opacity 1s, visibility 1s;
+    z-index:3;
+}
+
+#loadingStatus p {
+    padding:0em 0em 1em;
+    margin:0em;
+}
+
+#loadingUL {
+    padding:1em 1em 0em;
+    margin:0em;
+}
+
+#loadingUL li {
+    padding:0.25em 0em 0.25em;
+}
+
+/* via https://css-loaders.com */
+.loader {
+    height:2px;
+    width:100%;
+    --c:no-repeat linear-gradient(#fff 0 0);
+    background:var(--c), var(--c), var(--c), var(--c);
+    background-size:21% 100%;
+    animation:loading_anim 1s infinite alternate;
+}
+
+@keyframes loading_anim {
+    0%,
+    20%  {background-position:calc(0*100%/4) 0,calc(1*100%/4) 0,calc(2*100%/4) 0,calc(3*100%/4) 0}
+    35%  {background-position:calc(0*100%/4) 0,calc(1*100%/4) 0,calc(2*100%/4) 0,calc(4*100%/4) 0}
+    50%  {background-position:calc(0*100%/4) 0,calc(1*100%/4) 0,calc(3*100%/4) 0,calc(4*100%/4) 0}
+    65%  {background-position:calc(0*100%/4) 0,calc(2*100%/4) 0,calc(3*100%/4) 0,calc(4*100%/4) 0}
+    80%,
+    100% {background-position:calc(1*100%/4) 0,calc(2*100%/4) 0,calc(3*100%/4) 0,calc(4*100%/4) 0}
+}
+
+
+/* --------------------------------- */
+/* SIDEBAR */
+
+/* MENU BUTTONS */
+#menu-buttons {
+    display:grid;
+/*    grid-template-columns:1fr  1fr minmax(auto, 2fr);*/
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    justify-content:space-evenly;
+    column-gap:0.5em;
+    row-gap:0.5em;
+}
+
+#hide-menu-button, #help-button, #colors-button {
+    grid-column: span 2;
+}
+
+#list-view-button, #clear-hl-button {
+    grid-column: span 3;
+}
+
+button {
+    background-color:black;
+    color:white;
+    font-family:"Andale Mono", monospace;
+    padding:0.25em 0.5em;
+    border:1px solid white;
+}
+
+button:hover {
+    color:deeppink;
+    cursor:pointer;
+}
+
+/* Applies to all <li> in the menu (excepting loading window) */
+li {padding-bottom:1em;}
+
+/* Span colors for scanned items:Illustration Level, Collections, GovDoc */
+/* https://colorkit.co/color/88ff82/ */
+.il {color:#88ff82;}
+.c {color:#ff8288;}
+.g {color:#82c6ff;}
+
+/* SIDEBAR HEADINGS (You Clicked On, Zones & Subzones, etc.) */
+.menu-heading {
+    font-size:1.17em;
+    font-weight:bold;
+    border-top:2px solid;
+    padding-top:0.17em;
+    margin-top:1em;
+}
+
+/* CLICKED LIST FORMATTING */
+#clicked-info h4 {
+    margin-top:0;
+    margin-bottom:0.25em;
+}
+
+#clicked-info p {
+    margin-top:0em;
+    padding-left:1em;
+}
+
+#clicked-info ul {
+    margin:0em;
+    padding-left:2em;
+}
+
+/* LIST VIEW HEADINGS & FORMATTING */
+#periodicals-list, #sc-list, #ia-list {padding-left:2em;}
+
+summary {cursor:pointer; padding-bottom: 0.5em;}
+summary:hover {color:deeppink;}
+
+details details {
+    padding-left:1em;
+    padding-top:0.25em;
+    padding-bottom:0.25em;
+}
+
+details details details {
+    border-left:1px dotted;
+}
+
+details details details ul {
+    margin:0em;
+    padding:0.25em 0.5em 0em 1.5em;
+    border-left:1px dotted;
+}
+
+details li:hover {
+    color:deeppink;
+    cursor:pointer;
+}
+
+
+/* --------------------------------- */
+/* HIGHLIGHTING:OSD OVERLAYS */
+
+/* For text in menu sidebars */
+.text-hl1 {color:yellow;}
+.text-hl2 {color:deeppink;}
+
+/* For OSD overlays */
+.zone-top-hl {border-top:4px solid yellow;}
+
+.hl {
+    border:2px solid yellow;
+    border-radius:6px;
+    animation:1.6s cubic-bezier(.07,.65,.44,1) hl_shelf_anim;
+}
+
+@keyframes hl_shelf_anim {
+    0% {background-color:rgba(255,255,0,0.5)}
+    100% {background-color:none;}
+}
+
+.hl2 {
+    border:2px solid deeppink;
+    border-radius:6px;
+    animation:1.6s cubic-bezier(.07,.65,.44,1) hl2_shelf_anim;
+}
+
+@keyframes hl2_shelf_anim {
+    0% {background-color:rgba(250,20,147,0.5)}
+    100% {background-color:none;}
+}
+
+#click_shelf_hl {
+    border:2px solid aqua;
+    border-radius:6px;
+    animation:0.8s cubic-bezier(.07,.65,.44,1) click_osd_overlay_anim;
+}
+
+@keyframes click_osd_overlay_anim {
+    0% {background-color:rgba(0,255,240,0.5);}
+    100% {background-color:none;}
+}
+
+.click_h2_animation {
+    animation:0.8s cubic-bezier(.07,.65,.44,1) click_text_anim;
+}
+
+@keyframes click_text_anim {
+    0% {color:aqua;}
+    100% {color:white;}
+}
+
+
+/* --------------------------------- */
+/* MOBILE */
+@media only screen and (max-width:640px) {
+
+    button {font-size:1.25em;}
+
+    #loadingStatus {
+        position:fixed;
+        top:unset;
+        left:unset;
+        top:60vh;
+        width:100vw;
+        height:100vh;
+        padding:1em;
+        border:none;
+        border-top:2px solid white;
+        font-size:small;
+    }
+
+    #loadingStatus ul {font-size:xx-small;}
+    #loadingStatus ul li {padding:0em;}
+
+    #zoom-out-button {
+        top:0.25em;
+        right:0.25em;
+    }
+
+    #menu-buttons {
+        font-size:small;
+    }
+
+    #show-menu-button {
+        top:unset;
+        left:unset;
+        bottom:0.25em;
+        right:0.25em;
+    }
+
+    #menu-container {
+        position:fixed;
+        top:60vh;
+        height:40vh;
+        resize:unset;
+        width:100vw;
+    }
+
+    #resize-handle-vertical {
+
+        cursor:row-resize;
+        width:3em;
+
+        position:absolute;
+        z-index:20;
+        right:0em;
+        bottom:40vh;
+        background-color:rgba(0,0,0,0.8);
+        color:white;
+        text-align:center;
+    }
+
+}

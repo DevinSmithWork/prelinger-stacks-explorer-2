@@ -1,0 +1,132 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- HTML Metadata -->
+    <title>Stacks Explorer 2</title>
+    <meta name="description" content="An experimental browsing interface for the Prelinger library, San Francisco." />
+    <meta name="keywords" content="library, libraries, experimental, discovery service, discovery, browsing, San Francisco, Prelinger, Prelinger Library" />
+    <meta name="creator" content="Devin Smith" />
+    <meta name="creator" content="Megan Prelinger" />
+    <meta name="creator" content="Rick Prelinger" />
+
+    <!-- DUBLIN CORE -->
+    <!-- https://www.dublincore.org/specifications/dublin-core/usageguide/2000-07-16/simple-html/ -->
+    <link rel = "schema.DC" href = "http://purl.org/DC/elements/1.0/" />
+    <meta name = "DC.Title" content = "Prelinger Library Stacks Explorer (v2)" />
+    <meta name = "DC.Type" content = "website" />
+    <meta name = "DC.Date" content = "2024-08-10" />
+    <meta name = "DC.Format" content = "text/html" />
+    <meta name = "DC.Language" content="en" />
+    <meta name = "DC.Creator" content = "Smith, Devin" />
+    <meta name = "DC.Creator" content = "Prelinger, Megan" />
+    <meta name = "DC.Creator" content = "Prelinger, Rick" />
+
+    <!-- OPEN GRAPH -->
+    <!-- https://ogp.me/ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Prelinger Library Stacks Explorer (v2)" />
+    <meta property="og:title" content="Prelinger Library Stacks Explorer (v2)" />
+    <meta property="og:url" content="http://prelingerlibrary.org/stacks/v2" />
+    <meta property="og:locale" content="en_US.utf-8" />
+    <meta property="og:image" content="https://prelingerlibrary.org/stacks/v2-480.jpg" />
+    <meta property="og:description" content="An experimental browsing interface for the Prelinger library, San Francisco." />
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="http://prelingerlibrary.org/stacks/v2" />
+    <meta name="twitter:creator" content="@devinsmithwork" />
+    <meta name="twitter:title" content="Prelinger Library Stacks Explorer (v2)" />
+    <meta name="twitter:description" content="An experimental browsing interface for the Prelinger library, San Francisco.">
+    <meta name="twitter:image" content="https://prelingerlibrary.org/stacks/v2-480.jpg" />
+
+    <!-- OpenSeadragon -->
+    <!-- http://openseadragon.github.io -->
+    <script src="openseadragon.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-- OSD viewer -->
+    <div id=osd-container></div>
+
+    <!-- Open Menu button (hiden by default) -->
+    <button id=show-menu-button onclick="toggleMenu();">MENU</button>
+
+    <!-- Zoom out button -->
+    <button id=zoom-out-button onclick="zoomOut();">ZOOM OUT</button>
+
+    <!-- Loading div -->
+    <div id=loadingStatus>
+        <p>LOADING DATA! ONE MOMENT PLEASE.</p>
+        <div class="loader"></div>
+        <ul id=loadingUL></ul>
+    </div>
+
+    <!-- Menu resize handles -->
+    <div id=resize-handle>
+        <div class=resize-handle-icon>&harr;</div>
+    </div>
+
+    <div id=resize-handle-vertical>
+        <div class=resize-handle-icon>&varr;</div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div id=menu-container>
+        <div id=menu-div>
+
+            <div id=menu-buttons>
+                <button id=hide-menu-button onclick="toggleMenu();">CLOSE</button>
+                <button id=help-button onclick="location.href='./about';">ABOUT</button>
+                <button id=colors-button onclick="randomBackgroundGradient();">COLORS</button>
+                <button id=clear-hl-button onclick="closeAllDetails();">CLEAR HL'S</button>
+                <button id=list-view-button onclick="toggleListView();">SHOW LISTS</button>
+            </div>
+
+            <div id=clicked-div>
+                <h2 class=menu-heading id=you-clicked-heading>
+                    YOU CLICKED/TAPPED ON
+                </h2>
+                <div id=clicked-info>
+                    Info about where you clicked/tapped will appear here.
+                </div>
+            </div>
+
+            <details id=zones-div>
+                <summary class=menu-heading onclick="closeNested(this, true);">
+                    ZONES &amp; SUBZONES
+                </summary>
+                <div id=zones-list></div>
+            </details>
+
+            <details id=periodicals-div>
+                <summary class=menu-heading  onclick="closeNested(this);">
+                    PERIODICALS (SHELVES)
+                </summary>
+                <ul id=periodicals-list></ul>
+            </details>
+
+            <details id=sc-div>
+                <summary class=menu-heading  onclick="closeNested(this);">
+                    SPECIAL COL. (SHELVES)
+                </summary>
+                <ul id=sc-list></ul>
+            </details>
+
+            <details id=ia-div>
+                <summary class=menu-heading>
+                    SCANNED ITEMS (EXT. LINKS)
+                </summary>
+                <ul id=ia-list></ul>
+            </details>
+        </div>
+    </div>
+
+    <!-- JS script -->
+    <script type="text/javascript" src="script.min.js"></script>
+
+</body>
+</html>
