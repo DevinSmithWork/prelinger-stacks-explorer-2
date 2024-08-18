@@ -98,15 +98,6 @@ function addWindowResizeEventListeners() {
         ui_vars.vertical_mode = true
     }
 
-    // initial setting for resize handles
-    if (ui_vars.vertical_mode == false) {
-        gid("resize-handle").style.display = "block"
-        gid("resize-handle-vertical").style.display = "none"
-    } else {
-        gid("resize-handle").style.display = "none"
-        gid("resize-handle-vertical").style.display = "block"
-    }
-
     // The listener function
     window.addEventListener('resize', function verticalModeCheck() {
         const menu_div = gid("menu-container")
@@ -116,15 +107,7 @@ function addWindowResizeEventListeners() {
             && ui_vars.vertical_mode == false) {
             ui_vars.vertical_mode = true
             menu_div.style.width = null
-            menu_div.style.height = gid("resize-handle-vertical").style.bottom
-            r_handle_reset()
-
             gid("resize-handle").style.display = "none"
-            if (ui_vars.menu_open == false) {
-                gid("resize-handle-vertical").style.display = "none"
-            } else {
-                gid("resize-handle-vertical").style.display = "block"
-            }
 
         // Window changed from vertical to horizontal
         } else if (window.innerWidth > ui_vars.vertical_breakpoint
@@ -135,7 +118,6 @@ function addWindowResizeEventListeners() {
             menu_div.style.width = gid("resize-handle").style.left
             r_handle_reset()
 
-            gid("resize-handle-vertical").style.display = "none"
             if (ui_vars.menu_open == false) {
                 gid("resize-handle").style.display = "none"
             } else {
@@ -151,27 +133,20 @@ function addWindowResizeEventListeners() {
 function addResizeHandleEventListeners() {
 
     const r_handle = gid("resize-handle")
-    const r_handle_vertical = gid("resize-handle-vertical")
     const menu_container = gid("menu-container")
 
     // Double-click listener
     r_handle.addEventListener("dblclick", r_handle_reset)
-    r_handle_vertical.addEventListener("dblclick", r_handle_reset)
 
     // onmousedown property set to the function below
     r_handle.onmousedown = dragMouseDown;
-    r_handle_vertical.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
 
         // get the mouse cursor position at startup:
-        if (ui_vars.vertical_mode == false) {
-            ui_vars.resize_handle_current_x = e.clientX;
-        } else {
-            ui_vars.resize_handle_current_y = e.clientY;
-        }
+        ui_vars.resize_handle_current_x = e.clientX;
 
         // Mouseup sets the appropriate properties to null
         document.onmouseup = closeDragElement;
@@ -184,47 +159,24 @@ function addResizeHandleEventListeners() {
         e = e || window.event;
         e.preventDefault();
 
-        if (ui_vars.vertical_mode == false) {
-            // calculate the new cursor position:
-            ui_vars.resize_handle_new_x = ui_vars.resize_handle_current_x - e.clientX;
-            ui_vars.resize_handle_current_x = e.clientX;
+        // calculate the new cursor position:
+        ui_vars.resize_handle_new_x = ui_vars.resize_handle_current_x - e.clientX;
+        ui_vars.resize_handle_current_x = e.clientX;
 
-            // set the resize handle's new position, clamp to min/max
-            const new_position = horizontal_clamp(ui_vars.resize_handle_new_x)
-            r_handle.style.left = (new_position) + "px";
+        // set the resize handle's new position, clamp to min/max
+        const new_position = horizontal_clamp(ui_vars.resize_handle_new_x)
+        r_handle.style.left = (new_position) + "px";
 
-            // Set the menu width to the new position
-            menu_container.style.width = r_handle.style.left
+        // Set the menu width to the new position
+        menu_container.style.width = r_handle.style.left
 
-            function horizontal_clamp(new_x) {
-                return (
-                    Math.min(
-                        Math.max(r_handle.offsetLeft - new_x, 350),
-                    gid("zoom-out-button").offsetLeft - 40))
-            }
-
-        } else {
-
-            // calculate the new cursor position:
-            ui_vars.resize_handle_new_y = ui_vars.resize_handle_current_y - e.clientY;
-            ui_vars.resize_handle_current_y = e.clientY;
-
-            // set the resize handle's new position, clamp to min/max
-            const new_position = vertical_clamp(ui_vars.resize_handle_current_y)
-            r_handle_vertical.style.bottom = (window.innerHeight - new_position) + "px"
-
-            // Set the menu height to the new position
-            menu_container.style.top = new_position + "px"
-            menu_container.style.height = (window.innerHeight - new_position) + "px"
-
-            function vertical_clamp(new_y) {
-                return (
-                    Math.max (
-                        Math.min(window.innerHeight, new_y), 110
-                    ))
-            }
-
+        function horizontal_clamp(new_x) {
+            return (
+                Math.min(
+                    Math.max(r_handle.offsetLeft - new_x, 350),
+                gid("zoom-out-button").offsetLeft - 40))
         }
+
     }
 
     // stop moving when mouse button is released:
@@ -337,8 +289,6 @@ function loadLibraryDataWithCallbacks() {
             gid("menu-container").style.visibility = "visible"
             gid("resize-handle").style.opacity = 1
             gid("resize-handle").style.visibility = "visible"
-            gid("resize-handle-vertical").style.opacity = 1
-            gid("resize-handle-vertical").style.visibility = "visible"
         }
     }
 }
@@ -1160,15 +1110,12 @@ function toggleMenu() {
         }
 
     } else {
-        const r_handle = gid("resize-handle-vertical")
 
         if (ui_vars.menu_open) {
             menu_div.style.display = "none";
-            r_handle.style.display = "none"
             show_menu_button.style.display = "block";
         } else {
             menu_div.style.display = "block";
-            r_handle.style.display = "block"
             show_menu_button.style.display = "none";
         }
 
@@ -1210,19 +1157,8 @@ function toggleListView() {
 // Called when the handles are doubleclicked,
 // or the window switches from horizontal to vertical mode.
 function r_handle_reset() {
-
-    const r_handle = gid("resize-handle")
-    const r_handle_vertical = gid("resize-handle-vertical")
-    const menu_container = gid("menu-container")
-
-    if (ui_vars.vertical_mode == false) {
-        r_handle.style.left = "20em"
-        menu_container.style.width = "20em"
-    } else {
-        menu_container.style.top = "60vh"
-        menu_container.style.height = "40vh"
-        r_handle_vertical.style.bottom = "40vh"
-    }
+    gid("resize-handle").style.left = "20em"
+    gid("menu-container").style.width = "20em"
 }
 
 
