@@ -75,7 +75,8 @@ var ui_vars = {
     resize_handle_current_y: 0,
     resize_handle_new_y: 0,
     vertical_breakpoint: 640,
-    vertical_mode: false
+    vertical_mode: false,
+    stars_bg: false
 }
 
 // Data from .jsons are loaded into these global vars
@@ -1185,4 +1186,15 @@ function randomBackgroundGradient() {
     console.log(gradient)
     document.body.style.background = gradient
 
+}
+
+function toggleStars() {
+    if (ui_vars.stars_bg) {
+        document.body.style.backgroundImage = null
+        gid("colors-button").innerText = "STARS"
+    } else {
+        document.body.style.backgroundImage = "url('stars.gif')"
+        gid("colors-button").innerText = "FLAT"
+    }
+    ui_vars.stars_bg  = !ui_vars.stars_bg
 }
