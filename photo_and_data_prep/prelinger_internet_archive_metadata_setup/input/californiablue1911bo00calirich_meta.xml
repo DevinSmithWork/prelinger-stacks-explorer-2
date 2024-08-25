@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <title>California blue book</title>
+  <creator>California. Secretary of State</creator>
+  <creator>California. Legislature</creator>
+  <description>Description based on: 1942</description>
+  <description>Compiled under the direction of the Secretary of State, the State Printer, and later, the Secretary of the Senate and the Chief Clerk of the Assembly</description>
+  <description>SERBIB/SERLOC merged record</description>
+  <publisher>[Sacramento, Calif. : State Printing Office</publisher>
+  <language>eng</language>
+  <possible-copyright-status>NOT_IN_COPYRIGHT</possible-copyright-status>
+  <sponsor>BayNet</sponsor>
+  <contributor>Prelinger Library</contributor>
+  <scanningcenter>rich</scanningcenter>
+  <mediatype>texts</mediatype>
+  <updatedate>2008-10-09 16:22:11</updatedate>
+  <updater>MarkGraves</updater>
+  <identifier>californiablue1911bo00calirich</identifier>
+  <uploader>markg@archive.org</uploader>
+  <addeddate>2008-10-09 16:22:13</addeddate>
+  <publicdate>2008-10-09 16:22:17</publicdate>
+  <ppi>500</ppi>
+  <lcamid>332127</lcamid>
+  <rcamid>324758</rcamid>
+  <camera>1Ds</camera>
+  <operator>scanner-jennifer-mansfield@archive.org</operator>
+  <scanner>rich1</scanner>
+  <scandate>20081009223027</scandate>
+  <imagecount>974</imagecount>
+  <foldoutcount>0</foldoutcount>
+  <identifier-access>http://www.archive.org/details/californiablue1911bo00calirich</identifier-access>
+  <identifier-ark>ark:/13960/t1dj5ph9j</identifier-ark>
+  <scanfactors>2</scanfactors>
+  <curation>[curator]evan@archive.org[/curator][date]20081028002647[/date][state]approved[/state]</curation>
+  <ocr>ABBYY FineReader 8.0</ocr>
+  <repub_state>4</repub_state>
+  <collection>prelinger_library</collection>
+  <collection>additional_collections</collection>
+  <collection>americana</collection>
+  <backup_location>ia903602_15</backup_location>
+  <external-identifier>urn:oclc:record:297344113</external-identifier>
+  <filesxml>Wed Dec 23 12:45:53 UTC 2020</filesxml>
+  <filesxml>Thu Dec 31 21:17:36 UTC 2020</filesxml>
+  <ocr_module_version>0.0.14</ocr_module_version>
+  <ocr_converted>abbyy-to-hocr 1.1.11</ocr_converted>
+  <page_number_confidence>94.23</page_number_confidence>
+  <subject>California -- Registers</subject>
+  <subject>California -- Politics and government -- Periodicals</subject>
+  <lccn>sf 98085525</lccn>
+  <oclc-id>1252324</oclc-id>
+  <associated-names>California. Secretary of State; California. Legislature</associated-names>
+</metadata>
