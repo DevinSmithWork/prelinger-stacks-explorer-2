@@ -7,7 +7,10 @@ The code is fairly well-commented, but I've also prepared a technical documentat
 This site is centered around the excellent large-image viewer OpenSeadragon: [https://github.com/openseadragon/openseadragon](https://github.com/openseadragon/openseadragon).
 
 ## photo_and_data_prep
-This folder contains the code for (1) converting data-entry CSVs into the nested .json format which the website uses, and (2) the [Processing Java](http://processing.org) program for adjusting the photo's skew/perspective.
+This folder contains the code for:
+1. Converting data-entry CSVs into the nested .json format which the website uses
+2. The [Processing Java](http://processing.org) program for adjusting the photo's skew/perspective.
+3. Converting Internet Archive metadata .xmls to CSVs.
 
 ## website
 This folder contains the code for the website itself, **minus the contents of dzi-files/** (The 9 composite photos of the stacks, converted into the tiling image .dzi format -- I'm happy to share these files, they're just a little too unwieldy for GitHub).
