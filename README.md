@@ -2,7 +2,7 @@
 
 This repo contains the code for [http://prelingerlibrary.org/stacks/v2](http://prelingerlibrary.org/stacks/v2).
 
-The code is fairly well-commented, but I've also prepared a technical documentation page if you prefer a more narrative style, or a little more information on why certain decisions were made: [http://prelingerlibrary.org/stacks/v2/about/documentaiton.html](http://prelingerlibrary.org/stacks/v2/about/documentaiton.html)
+The code is fairly well-commented, but I've also prepared a technical documentation page if you prefer a more narrative style, or a little more information on why certain decisions were made: [http://prelingerlibrary.org/stacks/v2/about/documentation.html](http://prelingerlibrary.org/stacks/v2/about/documentation.html)
 
 This site is centered around the excellent large-image viewer OpenSeadragon: [https://github.com/openseadragon/openseadragon](https://github.com/openseadragon/openseadragon).
 
